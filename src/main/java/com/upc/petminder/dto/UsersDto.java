@@ -1,4 +1,5 @@
 package com.upc.petminder.dto;
 
-public class UsersDTO {
+public class UsersDto {
+
 }

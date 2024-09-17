@@ -16,9 +16,9 @@ public class HistorialMedico {
     private Long id;
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
-    @Column(name = "diagnostico", nullable = false, length = 100)
+    @Column(name = "diagnostico", length = 100)
     private String diagnostico;
-    @Column(name = "tratamiento", nullable = false, length = 100)
+    @Column(name = "tratamiento", length = 100)
     private String tratamiento;
     @Column(name = "fecha", nullable = false, length = 100)
     private LocalDate fecha;
