@@ -24,7 +24,7 @@ public class RecordatoriosController {
     }
 
     @PostMapping("registrar-recordatorio")
-    @PreAuthorize("hasAuthority('VETERINARY')")
+    @PreAuthorize("hasAuthority('VETERINARY')")//para pedir permizo de rol veterinary
     public ResponseEntity<RecordatoriosDto> create(@RequestBody RecordatoriosDto recordatoriosDto) {
         return new ResponseEntity<>(recordatoriosService.save(recordatoriosDto), HttpStatus.CREATED);
     }
