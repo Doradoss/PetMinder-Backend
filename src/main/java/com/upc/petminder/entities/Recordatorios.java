@@ -25,7 +25,6 @@ public class Recordatorios {
     @Column(name = "hora", nullable = false)
     private LocalTime hora;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="tipo_recordatorio_id")
     private TipoRecordatorio tipo_recordatorio;

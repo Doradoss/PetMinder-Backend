@@ -14,7 +14,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/veterinary")
+@RequestMapping("/api/user")
 public class DietaController {
 
     final DietaService dietaService;
