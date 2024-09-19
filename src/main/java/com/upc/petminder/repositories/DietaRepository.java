@@ -11,12 +11,13 @@ import java.util.List;
 
 public interface DietaRepository extends JpaRepository<Dieta, Long> {
 
+    //Lista las dietas en base a una fecha especifica
     @Query(value="SELECT d.nombre AS nombreDieta, \n" +
             " d.indicaciones AS indicacionesDieta\n" +
             "FROM dieta d \n" +
             "WHERE d.fecha_creacion = :fecha\n" +
             "GROUP BY d.nombre, d.indicaciones;", nativeQuery = true)
-    List<Tuple> listDietaMascotaPorFechaCreacion(@Param("fecha") LocalDate fecha);
+    List<Tuple> listDietaPorFechaCreacion(@Param("fecha") LocalDate fecha);
 
 
 }

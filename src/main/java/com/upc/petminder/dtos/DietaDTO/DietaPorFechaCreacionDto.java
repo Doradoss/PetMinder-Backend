@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DietaMascotaPorFechaCreacionDto {
+public class DietaPorFechaCreacionDto {
 
     private String nombreDieta;
     private String indicacionesDieta;

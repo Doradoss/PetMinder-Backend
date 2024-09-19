@@ -1,7 +1,7 @@
 package com.upc.petminder.controllers;
 
 import com.upc.petminder.dtos.DietaDTO.DietaDto;
-import com.upc.petminder.dtos.DietaDTO.DietaMascotaPorFechaCreacionDto;
+import com.upc.petminder.dtos.DietaDTO.DietaPorFechaCreacionDto;
 import com.upc.petminder.serviceinterfaces.DietaService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -30,9 +30,9 @@ public class DietaController {
     }
 
     @GetMapping("/listar-dieta-fecha")
-    public ResponseEntity<List<DietaMascotaPorFechaCreacionDto>> listDietaMascotaPorFecha(
+    public ResponseEntity<List<DietaPorFechaCreacionDto>> listDietaPorFecha(
             @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
-        return ResponseEntity.ok(dietaService.dietaMascotaPorFechaCreacionDtos(fecha));
+        return ResponseEntity.ok(dietaService.dietaPorFechaCreacionDtos(fecha));
     }
 
 }

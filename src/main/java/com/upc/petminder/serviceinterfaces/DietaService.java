@@ -1,7 +1,7 @@
 package com.upc.petminder.serviceinterfaces;
 
 import com.upc.petminder.dtos.DietaDTO.DietaDto;
-import com.upc.petminder.dtos.DietaDTO.DietaMascotaPorFechaCreacionDto;
+import com.upc.petminder.dtos.DietaDTO.DietaPorFechaCreacionDto;
 import com.upc.petminder.entities.Dieta;
 import com.upc.petminder.repositories.DietaRepository;
 import jakarta.persistence.Tuple;
@@ -27,12 +27,12 @@ public class DietaService {
         return modelMapper.map(dieta, DietaDto.class);
     }
 
-    public List<DietaMascotaPorFechaCreacionDto> dietaMascotaPorFechaCreacionDtos(LocalDate fecha) {
-        List<Tuple> tuplas = dietaRepository.listDietaMascotaPorFechaCreacion(fecha);
-        List<DietaMascotaPorFechaCreacionDto> ListDietaMascotaPorFecha = new ArrayList<>();
-        DietaMascotaPorFechaCreacionDto DietaMascotaPorFecha;
+    public List<DietaPorFechaCreacionDto> dietaPorFechaCreacionDtos(LocalDate fecha) {
+        List<Tuple> tuplas = dietaRepository.listDietaPorFechaCreacion(fecha);
+        List<DietaPorFechaCreacionDto> ListDietaMascotaPorFecha = new ArrayList<>();
+        DietaPorFechaCreacionDto DietaMascotaPorFecha;
         for (Tuple tuple : tuplas) {
-            DietaMascotaPorFecha = new DietaMascotaPorFechaCreacionDto(
+            DietaMascotaPorFecha = new DietaPorFechaCreacionDto(
                     tuple.get("nombreDieta", String.class),
                     tuple.get("indicacionesDieta", String.class)
             );

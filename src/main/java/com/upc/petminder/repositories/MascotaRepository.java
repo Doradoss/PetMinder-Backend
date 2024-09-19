@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
-
+//Muestra el total de mascotas por tipo de especie existente en el sistema
 public interface MascotaRepository extends JpaRepository<Mascota, Long> {
     @Query(value="SELECT especie, COUNT(*) AS cantidad_mascotas\n" +
             "FROM mascota\n" +
