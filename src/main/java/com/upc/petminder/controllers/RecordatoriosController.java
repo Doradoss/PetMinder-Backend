@@ -1,5 +1,6 @@
 package com.upc.petminder.controllers;
 
+import com.upc.petminder.dtos.RecordatoriosDTO.RecordatorioPorMascotaDto;
 import com.upc.petminder.dtos.RecordatoriosDTO.RecordatoriosDto;
 import com.upc.petminder.dtos.RecordatoriosDTO.RecordatoriosPorPeriodoDeFechasDto;
 import com.upc.petminder.dtos.RecordatoriosDTO.RecordatoriosPorTipoDto;
@@ -40,5 +41,12 @@ public class RecordatoriosController {
             @RequestParam("tipoRecordatorioId") Long tipoRecordatorioId
     ) {
         return ResponseEntity.ok(recordatoriosService.recordatoriosPorTipo(tipoRecordatorioId));
+    }
+    //Mostrar recordatorios por mascota
+    @GetMapping("/recordatorio-mascota")
+    public ResponseEntity<List<RecordatorioPorMascotaDto>> ListaRecordatoriosPorMascota(
+            @RequestParam("mascotaId") Long mascotaId
+    ){
+        return ResponseEntity.ok(recordatoriosService.recordatoriosPorMascota(mascotaId));
     }
 }

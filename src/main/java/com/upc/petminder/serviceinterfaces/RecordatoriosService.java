@@ -1,5 +1,6 @@
 package com.upc.petminder.serviceinterfaces;
 
+import com.upc.petminder.dtos.RecordatoriosDTO.RecordatorioPorMascotaDto;
 import com.upc.petminder.dtos.RecordatoriosDTO.RecordatoriosDto;
 import com.upc.petminder.dtos.RecordatoriosDTO.RecordatoriosPorPeriodoDeFechasDto;
 import com.upc.petminder.dtos.RecordatoriosDTO.RecordatoriosPorTipoDto;
@@ -100,5 +101,22 @@ public class RecordatoriosService {
             listRecordatoriosPorTipo.add(recordatoriosTipo);
         }
         return listRecordatoriosPorTipo;
+    }
+
+    public List<RecordatorioPorMascotaDto> recordatoriosPorMascota (Long mascotaId) {
+        List<Tuple> tuples = recordatoriosRepository.recordatorioPorMascota(mascotaId);
+        List<RecordatorioPorMascotaDto> listRecordatoriosPorMascota = new ArrayList<>();
+        RecordatorioPorMascotaDto recordatoriosMascota;
+
+        for (Tuple tuple : tuples) {
+            recordatoriosMascota = new RecordatorioPorMascotaDto(
+                    tuple.get("titulo", String.class),
+                    tuple.get("descripcion", String.class),
+                    tuple.get("fecha", Date.class),
+                    tuple.get("hora", Time.class)
+            );
+            listRecordatoriosPorMascota.add(recordatoriosMascota);
+        }
+        return listRecordatoriosPorMascota;
     }
 }
