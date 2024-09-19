@@ -28,4 +28,9 @@ public interface RecordatoriosRepository extends JpaRepository<Recordatorios, Lo
             "WHERE m.id = :mascotaId", nativeQuery = true)
     List<Tuple> recordatorioPorMascota(@Param("mascotaId") Long mascota_id);
 
+    //Mostrar los recordatorios completados
+    @Query(value = "SELECT r.id as id, r.titulo as titulo, r.descripcion as descripcion, r.fecha as fecha, r.hora as hora " +
+            "FROM recordatorios r WHERE r.completado = true", nativeQuery = true)
+    List<Tuple> RecordatoriosCompletados();
+
 }

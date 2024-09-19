@@ -24,6 +24,8 @@ public class Recordatorios {
     private LocalDate fecha;
     @Column(name = "hora", nullable = false)
     private LocalTime hora;
+    @Column(name = "completado" , nullable = false)
+    private Boolean completado;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="tipo_recordatorio_id")
