@@ -26,7 +26,7 @@ public class RecordatoriosController {
     public ResponseEntity<RecordatoriosDto> create(@RequestBody RecordatoriosDto recordatoriosDto) {
         return new ResponseEntity<>(recordatoriosService.save(recordatoriosDto), HttpStatus.CREATED);
     }
-    //Mostrar recordatprios entre un periodo de fechas
+    //Mostrar recordatorios entre un periodo de fechas
     @GetMapping("recordatorio-periodo")
     public ResponseEntity<List<RecordatoriosPorPeriodoDeFechasDto>> ListaRecordatoriosEnPeriodo (
             @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
