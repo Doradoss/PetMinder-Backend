@@ -1,5 +1,6 @@
 package com.upc.petminder.serviceinterfaces;
 
+import com.upc.petminder.dtos.RecomendacionDietaDTO.DietaPorMascotaDto;
 import com.upc.petminder.dtos.RecomendacionDietaDTO.DietaPorMascotaYFechaDto;
 import com.upc.petminder.dtos.RecomendacionDietaDTO.RecomendacionDietaDto;
 import com.upc.petminder.entities.*;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -60,7 +62,20 @@ public class RecomendacionDietaService {
         return ListDietaMascotaPorFecha;
     }
 
+    //Dieta por IdMascota
+    public List<DietaPorMascotaDto> DietasPorMascota(Integer mascotaId) {
+        List<Tuple> results = recomendacionDietaRepository.buscaDietaPorMascotaId(mascotaId);
+        List<DietaPorMascotaDto> ListDietaPorMascota = new ArrayList<>();
+        DietaPorMascotaDto DietaPorMascota;
+        for (Tuple tuple : results) {
+            DietaPorMascota = new DietaPorMascotaDto(
+                    tuple.get("nombreDieta", String.class),
+                    tuple.get("indicaciones", String.class)
 
-
+            );
+            ListDietaPorMascota.add(DietaPorMascota);
+        }
+        return ListDietaPorMascota;
+    }
 
 }

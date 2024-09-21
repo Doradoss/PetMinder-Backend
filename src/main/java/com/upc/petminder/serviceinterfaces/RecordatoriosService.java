@@ -1,8 +1,6 @@
 package com.upc.petminder.serviceinterfaces;
 
-import com.upc.petminder.dtos.RecordatoriosDTO.RecordatoriosDto;
-import com.upc.petminder.dtos.RecordatoriosDTO.RecordatoriosPorPeriodoDeFechasDto;
-import com.upc.petminder.dtos.RecordatoriosDTO.RecordatoriosPorTipoDto;
+import com.upc.petminder.dtos.RecordatoriosDTO.*;
 import com.upc.petminder.entities.Mascota;
 import com.upc.petminder.entities.Recordatorios;
 import com.upc.petminder.entities.TipoRecordatorio;
@@ -17,9 +15,11 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RecordatoriosService {
@@ -100,5 +100,51 @@ public class RecordatoriosService {
             listRecordatoriosPorTipo.add(recordatoriosTipo);
         }
         return listRecordatoriosPorTipo;
+    }
+
+    public List<RecordatorioPorMascotaDto> recordatoriosPorMascota (Long mascotaId) {
+        List<Tuple> tuples = recordatoriosRepository.recordatorioPorMascota(mascotaId);
+        List<RecordatorioPorMascotaDto> listRecordatoriosPorMascota = new ArrayList<>();
+        RecordatorioPorMascotaDto recordatoriosMascota;
+
+        for (Tuple tuple : tuples) {
+            recordatoriosMascota = new RecordatorioPorMascotaDto(
+                    tuple.get("titulo", String.class),
+                    tuple.get("descripcion", String.class),
+                    tuple.get("fecha", Date.class),
+                    tuple.get("hora", Time.class)
+            );
+            listRecordatoriosPorMascota.add(recordatoriosMascota);
+        }
+        return listRecordatoriosPorMascota;
+    }
+
+
+    //Mostrar los recordatorios completados
+    public List<RecordatoriosCompletadosDTO> recordatoriosCompletados() {
+        List<Tuple> tuples = recordatoriosRepository.RecordatoriosCompletados();
+        return tuples.stream()
+                .map(tuple -> new RecordatoriosCompletadosDTO(
+                        tuple.get("id", Long.class),
+                        tuple.get("titulo", String.class),
+                        tuple.get("descripcion", String.class),
+                        tuple.get("fecha", Date.class),
+                        tuple.get("hora", Time.class)
+                ))
+                .collect(Collectors.toList());
+    }
+    //Contar los recordatorios por mascota
+    public List<ContarRecordatoriosxMascotaDto> contarrecordatoriosPorMascota (Long mascotaId) {
+        List<Tuple> tuples = recordatoriosRepository.contarrecordatorioPorMascota(mascotaId);
+        List<ContarRecordatoriosxMascotaDto> listCuentaRecordatoriosPorMascota = new ArrayList<>();
+        ContarRecordatoriosxMascotaDto cuentarecordatoriosMascota;
+
+        for (Tuple tuple : tuples) {
+            cuentarecordatoriosMascota = new ContarRecordatoriosxMascotaDto(
+                    tuple.get("total_recordatorios", int.class)
+            );
+            listCuentaRecordatoriosPorMascota.add(cuentarecordatoriosMascota);
+        }
+        return listCuentaRecordatoriosPorMascota;
     }
 }

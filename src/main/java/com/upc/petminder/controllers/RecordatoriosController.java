@@ -1,8 +1,6 @@
 package com.upc.petminder.controllers;
 
-import com.upc.petminder.dtos.RecordatoriosDTO.RecordatoriosDto;
-import com.upc.petminder.dtos.RecordatoriosDTO.RecordatoriosPorPeriodoDeFechasDto;
-import com.upc.petminder.dtos.RecordatoriosDTO.RecordatoriosPorTipoDto;
+import com.upc.petminder.dtos.RecordatoriosDTO.*;
 import com.upc.petminder.serviceinterfaces.RecordatoriosService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -41,4 +39,27 @@ public class RecordatoriosController {
     ) {
         return ResponseEntity.ok(recordatoriosService.recordatoriosPorTipo(tipoRecordatorioId));
     }
+    //Mostrar recordatorios por mascota
+    @GetMapping("/recordatorio-mascota")
+    public ResponseEntity<List<RecordatorioPorMascotaDto>> ListaRecordatoriosPorMascota(
+            @RequestParam("mascotaId") Long mascotaId
+    ){
+        return ResponseEntity.ok(recordatoriosService.recordatoriosPorMascota(mascotaId));
+    }
+
+    //Mostrar recordatorios completados
+    @GetMapping("/recordatorios-completados")
+    public ResponseEntity<List<RecordatoriosCompletadosDTO>> obtenerRecordatoriosCompletados() {
+        List<RecordatoriosCompletadosDTO> recordatoriosCompletados = recordatoriosService.recordatoriosCompletados();
+        return ResponseEntity.ok(recordatoriosCompletados);
+    }
+
+    //Contar recordatorios por mascota
+    @GetMapping("/contar-recordatorio-mascota")
+    public ResponseEntity<List<ContarRecordatoriosxMascotaDto>> ListaCuentaRecordatoriosPorMascota(
+            @RequestParam("mascotaId") Long mascotaId
+    ){
+        return ResponseEntity.ok(recordatoriosService.contarrecordatoriosPorMascota(mascotaId));
+    }
+
 }

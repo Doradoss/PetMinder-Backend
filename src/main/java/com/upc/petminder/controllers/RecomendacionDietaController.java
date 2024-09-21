@@ -1,6 +1,7 @@
 package com.upc.petminder.controllers;
 
 
+import com.upc.petminder.dtos.RecomendacionDietaDTO.DietaPorMascotaDto;
 import com.upc.petminder.dtos.RecomendacionDietaDTO.DietaPorMascotaYFechaDto;
 import com.upc.petminder.dtos.RecomendacionDietaDTO.RecomendacionDietaDto;
 import com.upc.petminder.serviceinterfaces.RecomendacionDietaService;
@@ -33,6 +34,13 @@ public class RecomendacionDietaController {
             @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
             @RequestParam("mascotaId") Integer mascotaId) {
         return ResponseEntity.ok(recomendacionDietaService.dietaPorMascotaYFechas(mascotaId, fecha));
+    }
+
+    //Dieta Por Mascota
+    @GetMapping("/listar-dieta-mascota")
+    public ResponseEntity<List<DietaPorMascotaDto>> buscarDietaPorMascota(
+            @RequestParam("mascotaId") Integer mascotaId) {
+        return ResponseEntity.ok(recomendacionDietaService.DietasPorMascota(mascotaId));
     }
 
 }
