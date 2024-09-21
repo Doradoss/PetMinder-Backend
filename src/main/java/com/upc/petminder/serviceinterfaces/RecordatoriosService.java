@@ -133,4 +133,18 @@ public class RecordatoriosService {
                 ))
                 .collect(Collectors.toList());
     }
+    //Contar los recordatorios por mascota
+    public List<ContarRecordatoriosxMascotaDto> contarrecordatoriosPorMascota (Long mascotaId) {
+        List<Tuple> tuples = recordatoriosRepository.contarrecordatorioPorMascota(mascotaId);
+        List<ContarRecordatoriosxMascotaDto> listCuentaRecordatoriosPorMascota = new ArrayList<>();
+        ContarRecordatoriosxMascotaDto cuentarecordatoriosMascota;
+
+        for (Tuple tuple : tuples) {
+            cuentarecordatoriosMascota = new ContarRecordatoriosxMascotaDto(
+                    tuple.get("total_recordatorios", int.class)
+            );
+            listCuentaRecordatoriosPorMascota.add(cuentarecordatoriosMascota);
+        }
+        return listCuentaRecordatoriosPorMascota;
+    }
 }

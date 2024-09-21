@@ -54,4 +54,12 @@ public class RecordatoriosController {
         return ResponseEntity.ok(recordatoriosCompletados);
     }
 
+    //Contar recordatorios por mascota
+    @GetMapping("/contar-recordatorio-mascota")
+    public ResponseEntity<List<ContarRecordatoriosxMascotaDto>> ListaCuentaRecordatoriosPorMascota(
+            @RequestParam("mascotaId") Long mascotaId
+    ){
+        return ResponseEntity.ok(recordatoriosService.contarrecordatoriosPorMascota(mascotaId));
+    }
+
 }

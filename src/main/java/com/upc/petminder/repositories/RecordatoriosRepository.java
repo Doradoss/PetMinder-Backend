@@ -33,4 +33,11 @@ public interface RecordatoriosRepository extends JpaRepository<Recordatorios, Lo
             "FROM recordatorios r WHERE r.completado = true", nativeQuery = true)
     List<Tuple> RecordatoriosCompletados();
 
+    //Contar recordatorios por mascota
+    @Query(value = "SELECT COUNT(*) AS total_recordatorios\n" +
+            "FROM recordatorios r\n" +
+            "JOIN mascota m ON r.mascota_id = m.id\n" +
+            "WHERE m.id = :mascota_id", nativeQuery = true)
+    List<Tuple> contarrecordatorioPorMascota(@Param("mascotaId") Long mascota_id);
+
 }
