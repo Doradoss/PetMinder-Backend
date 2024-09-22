@@ -23,6 +23,20 @@ public class DietaController {
         this.dietaService = dietaService;
     }
 
+    @GetMapping("/findall-dieta")
+    public ResponseEntity<List<DietaDto>> findAll() {
+        return ResponseEntity.ok(dietaService.findAll());
+    }
+
+    @GetMapping("/dieta/{id}")
+    public ResponseEntity<DietaDto> findById(@PathVariable Long id) {
+        DietaDto dietaDto = dietaService.getDietaById(id);
+        if (dietaDto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(dietaDto);
+    }
+
     @PostMapping("/registrar-dieta")
     @PreAuthorize("hasAuthority('VETERINARY')")
     public ResponseEntity<DietaDto> create(@RequestBody DietaDto dietaDto) {

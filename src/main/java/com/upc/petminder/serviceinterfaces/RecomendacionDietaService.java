@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RecomendacionDietaService {
+
+    private List<RecomendacionDieta> recomendacionDietas = new ArrayList<>();
     final RecomendacionDietaRepository recomendacionDietaRepository;
     final DietaRepository dietaRepository;
     final MascotaRepository mascotaRepository;
@@ -27,6 +29,40 @@ public class RecomendacionDietaService {
         this.dietaRepository = dietaRepository;
         this.mascotaRepository = mascotaRepository;
     }
+
+    //Lista todos los registros de Recomendacion Dieta
+    public List<RecomendacionDietaDto> findAll() {
+        List<RecomendacionDieta> recomendaciones = recomendacionDietaRepository.findAll();
+        ModelMapper modelMapper = new ModelMapper();
+        List<RecomendacionDietaDto> recomendacionDietaDtos = new ArrayList<>();
+
+        for (RecomendacionDieta recomendacionDieta : recomendaciones) {
+            RecomendacionDietaDto recomendacionDietaDto = modelMapper.map(recomendacionDieta, RecomendacionDietaDto.class);
+
+            // Obtener claves foráneas de Dieta y Mascota y asignarlas al DTO
+            Dieta dieta = recomendacionDieta.getDieta();
+            Mascota mascota = recomendacionDieta.getMascota();
+            recomendacionDietaDto.setDieta_id(dieta.getId());
+            recomendacionDietaDto.setMascota_id(mascota.getId());
+
+            recomendacionDietaDtos.add(recomendacionDietaDto);
+        }
+
+        return recomendacionDietaDtos;
+    }
+
+    //Listar por id
+    public RecomendacionDietaDto getRecomendacionDietaById(Long id) {
+        RecomendacionDieta recomendacionDieta = recomendacionDietaRepository.findById(id).orElse(null);
+        if (recomendacionDieta == null) { return null;}
+
+        ModelMapper modelMapper = new ModelMapper();
+        RecomendacionDietaDto dto = modelMapper.map(recomendacionDieta, RecomendacionDietaDto.class);
+        dto.setDieta_id(recomendacionDieta.getDieta().getId());
+        dto.setMascota_id(recomendacionDieta.getMascota().getId());
+        return dto;
+    }
+
 
     public RecomendacionDietaDto save(RecomendacionDietaDto recomendacionDietaDto) {
         ModelMapper modelMapper = new ModelMapper();
@@ -47,6 +83,30 @@ public class RecomendacionDietaService {
 
         return recomendacionDietaDto;
     }
+    private RecomendacionDieta convertToEntity(RecomendacionDietaDto dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        RecomendacionDieta recomendacionDieta = modelMapper.map(dto, RecomendacionDieta.class);
+
+        // Asignar la dieta, mascota y tipo de recordatorio
+        recomendacionDieta.setDieta(dietaRepository.findById(dto.getDieta_id()).orElse(null));
+        recomendacionDieta.setMascota(mascotaRepository.findById(dto.getMascota_id()).orElse(null));
+
+
+        return recomendacionDieta;
+    }
+
+    public void updateRecomendacionDieta(Long id, RecomendacionDieta recomendacionDieta) {
+        RecomendacionDietaDto existingRecomendacionDieta = getRecomendacionDietaById(id);
+        if (existingRecomendacionDieta != null) {
+            existingRecomendacionDieta.setFecha(recomendacionDieta.getFecha());
+            existingRecomendacionDieta.setDieta_id(recomendacionDieta.getDieta().getId());
+            existingRecomendacionDieta.setMascota_id(recomendacionDieta.getMascota().getId());
+
+            RecomendacionDieta updatedRecomendacionDieta = convertToEntity(existingRecomendacionDieta);
+            recomendacionDietaRepository.save(updatedRecomendacionDieta);
+        }
+    }
+
 
     public List<DietaPorMascotaYFechaDto> dietaPorMascotaYFechas(Integer mascotaId, LocalDate fecha) {
         List<Tuple> tuplas = recomendacionDietaRepository.dietasPorMascotaYFecha(mascotaId, fecha);
@@ -78,4 +138,11 @@ public class RecomendacionDietaService {
         return ListDietaPorMascota;
     }
 
+    public void insert(RecomendacionDieta recomendacionDieta) {
+        recomendacionDietaRepository.save(recomendacionDieta);
+    }
+
+    public void delete(Long id) {
+        recomendacionDietaRepository.deleteById(id);
+    }
 }

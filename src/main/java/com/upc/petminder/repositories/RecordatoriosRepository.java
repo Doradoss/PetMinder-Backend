@@ -38,6 +38,6 @@ public interface RecordatoriosRepository extends JpaRepository<Recordatorios, Lo
             "FROM recordatorios r\n" +
             "JOIN mascota m ON r.mascota_id = m.id\n" +
             "WHERE m.id = :mascota_id", nativeQuery = true)
-    List<Tuple> contarrecordatorioPorMascota(@Param("mascotaId") Long mascota_id);
+    List<Tuple> contarrecordatorioPorMascota(@Param("mascota_id") Long mascota_id);
 
 }

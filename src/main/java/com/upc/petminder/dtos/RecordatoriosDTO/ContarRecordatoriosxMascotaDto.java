@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ContarRecordatoriosxMascotaDto {
-    private int total_recordatorios;
+    private Long total_recordatorios;
 }

@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TotalMascotasPorEspecieDto {
-    private Long cantidad_mascotas;
+    private Long cantidad_mascotas_especie;
 }

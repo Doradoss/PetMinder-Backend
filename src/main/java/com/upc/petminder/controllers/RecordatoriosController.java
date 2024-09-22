@@ -1,7 +1,10 @@
 package com.upc.petminder.controllers;
 
+
 import com.upc.petminder.dtos.RecordatoriosDTO.*;
+import com.upc.petminder.entities.Recordatorios;
 import com.upc.petminder.serviceinterfaces.RecordatoriosService;
+import org.modelmapper.ModelMapper;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+
 
 @CrossOrigin
 @RestController
@@ -18,6 +22,20 @@ public class RecordatoriosController {
 
     public RecordatoriosController(RecordatoriosService recordatoriosService) {
         this.recordatoriosService = recordatoriosService;
+    }
+
+    @GetMapping("/findall-recordatorios")
+    public ResponseEntity<List<RecordatoriosDto>> findAll() {
+        return ResponseEntity.ok(recordatoriosService.findAll());
+    }
+
+    @GetMapping("/recordatorio/{id}")
+    public ResponseEntity<RecordatoriosDto> findById(@PathVariable Long id) {
+        RecordatoriosDto recordatorios = recordatoriosService.getRecordatoriosById(id);
+        if (recordatorios == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(recordatorios);
     }
 
     @PostMapping("registrar-recordatorio")
@@ -60,6 +78,18 @@ public class RecordatoriosController {
             @RequestParam("mascotaId") Long mascotaId
     ){
         return ResponseEntity.ok(recordatoriosService.contarrecordatoriosPorMascota(mascotaId));
+    }
+
+    @PutMapping("/recordatorios/{id}")
+    public void updateRecordatorios(@RequestBody RecordatoriosDto dto) {
+        ModelMapper m = new ModelMapper();
+        Recordatorios recordatorios = m.map(dto, Recordatorios.class);
+        recordatoriosService.insert(recordatorios);
+    }
+
+    @DeleteMapping("/recordatoriodelete/{id}")
+    public void delete(@PathVariable("id") Long id){
+        recordatoriosService.delete(id);
     }
 
 }

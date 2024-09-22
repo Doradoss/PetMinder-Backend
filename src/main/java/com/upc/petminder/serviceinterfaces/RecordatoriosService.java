@@ -1,10 +1,7 @@
 package com.upc.petminder.serviceinterfaces;
 
 import com.upc.petminder.dtos.RecordatoriosDTO.*;
-import com.upc.petminder.entities.Mascota;
-import com.upc.petminder.entities.Recordatorios;
-import com.upc.petminder.entities.TipoRecordatorio;
-import com.upc.petminder.entities.Users;
+import com.upc.petminder.entities.*;
 import com.upc.petminder.repositories.MascotaRepository;
 import com.upc.petminder.repositories.RecordatoriosRepository;
 import com.upc.petminder.repositories.TipoRecordatorioRepository;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +19,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class RecordatoriosService {
+
+    private List<Recordatorios> recordatorios = new ArrayList<>();  // Nuestros datos
     final RecordatoriosRepository recordatoriosRepository;
     final TipoRecordatorioRepository tipoRecordatorioRepository;
     final UserRepository usersRepository;
@@ -37,6 +35,45 @@ public class RecordatoriosService {
         this.usersRepository = usersRepository;
         this.mascotaRepository = mascotaRepository;
     }
+
+    //Listar los registros de Recordatorios existentes
+    public List<RecordatoriosDto> findAll() {
+        List<Recordatorios> recordatorios = recordatoriosRepository.findAll();
+        ModelMapper modelMapper = new ModelMapper();
+        List<RecordatoriosDto> recordatorioDtos = new ArrayList<>();
+
+        for (Recordatorios recordatorio : recordatorios) {
+            RecordatoriosDto recordatorioDto = modelMapper.map(recordatorio, RecordatoriosDto.class);
+
+            // Obtener claves foráneas de Usuario, Mascota y TipoRecordatorio
+            Users usuario = recordatorio.getUsers();
+            Mascota mascota = recordatorio.getMascota();
+            TipoRecordatorio tipoRecordatorio = recordatorio.getTipo_recordatorio();
+
+            recordatorioDto.setUsuario_id(usuario.getId());
+            recordatorioDto.setMascota_id(mascota.getId());
+            recordatorioDto.setTipo_recordatorio_id(tipoRecordatorio.getId());
+
+            recordatorioDtos.add(recordatorioDto);
+        }
+
+        return recordatorioDtos;
+    }
+
+
+    //Listar por id
+    public RecordatoriosDto getRecordatoriosById(Long id) {
+        Recordatorios recordatorios = recordatoriosRepository.findById(id).orElse(null);
+        if (recordatorios == null) { return null;}
+
+        ModelMapper modelMapper = new ModelMapper();
+        RecordatoriosDto dto = modelMapper.map(recordatorios, RecordatoriosDto.class);
+        dto.setUsuario_id(recordatorios.getUsers().getId());
+        dto.setMascota_id(recordatorios.getMascota().getId());
+        dto.setTipo_recordatorio_id(recordatorios.getTipo_recordatorio().getId());
+        return dto;
+    }
+
 
     public RecordatoriosDto save(RecordatoriosDto recordatoriosDto) {
         ModelMapper modelMapper = new ModelMapper();
@@ -67,6 +104,35 @@ public class RecordatoriosService {
         recordatoriosDto.setMascota_id(recordatorios.getMascota().getId());
 
         return recordatoriosDto;
+    }
+
+    private Recordatorios convertToEntity(RecordatoriosDto dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        Recordatorios recordatorios = modelMapper.map(dto, Recordatorios.class);
+
+        // Asegúrate de establecer las relaciones necesarias, por ejemplo:
+        recordatorios.setMascota(mascotaRepository.findById(dto.getMascota_id()).orElse(null));
+        recordatorios.setTipo_recordatorio(tipoRecordatorioRepository.findById(dto.getTipo_recordatorio_id()).orElse(null));
+        // Y también el usuario, si es necesario
+        // recordatorios.setUsers(userRepository.findById(dto.getUsuario_id()).orElse(null));
+
+        return recordatorios;
+    }
+
+    public void updateRecordatorios(Long id, Recordatorios recordatorios) {
+        RecordatoriosDto existingRecordatorio = getRecordatoriosById(id);
+
+        if (existingRecordatorio != null) {
+            existingRecordatorio.setTitulo(recordatorios.getTitulo());
+            existingRecordatorio.setDescripcion(recordatorios.getDescripcion());
+            existingRecordatorio.setFecha(recordatorios.getFecha());
+            existingRecordatorio.setHora(recordatorios.getHora());
+            existingRecordatorio.setMascota_id(recordatorios.getMascota().getId());
+            existingRecordatorio.setTipo_recordatorio_id(recordatorios.getTipo_recordatorio().getId());
+
+            Recordatorios updatedRecordatorio = convertToEntity(existingRecordatorio);
+            recordatoriosRepository.save(updatedRecordatorio);
+        };
     }
 
     public List<RecordatoriosPorPeriodoDeFechasDto> recordatoriosPorPeriodo (LocalDate from, LocalDate to){
@@ -141,10 +207,18 @@ public class RecordatoriosService {
 
         for (Tuple tuple : tuples) {
             cuentarecordatoriosMascota = new ContarRecordatoriosxMascotaDto(
-                    tuple.get("total_recordatorios", int.class)
+                    tuple.get("total_recordatorios", Long.class)
             );
             listCuentaRecordatoriosPorMascota.add(cuentarecordatoriosMascota);
         }
         return listCuentaRecordatoriosPorMascota;
+    }
+
+    public void insert(Recordatorios recordatorios) {
+        recordatoriosRepository.save(recordatorios);
+    }
+
+    public void delete(Long id) {
+        recordatoriosRepository.deleteById(id);
     }
 }
