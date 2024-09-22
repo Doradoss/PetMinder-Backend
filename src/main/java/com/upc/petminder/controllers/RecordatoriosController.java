@@ -2,9 +2,7 @@ package com.upc.petminder.controllers;
 
 
 import com.upc.petminder.dtos.RecordatoriosDTO.*;
-import com.upc.petminder.entities.Recordatorios;
 import com.upc.petminder.serviceinterfaces.RecordatoriosService;
-import org.modelmapper.ModelMapper;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +21,13 @@ public class RecordatoriosController {
     public RecordatoriosController(RecordatoriosService recordatoriosService) {
         this.recordatoriosService = recordatoriosService;
     }
-    //Listar recordatorios
+    //Listar Recordatorios
     @GetMapping("/findall-recordatorios")
     public ResponseEntity<List<RecordatoriosDto>> findAll() {
         return ResponseEntity.ok(recordatoriosService.findAll());
     }
 
+    //Listar Recordatorios por Id
     @GetMapping("/recordatorio/{id}")
     public ResponseEntity<RecordatoriosDto> findById(@PathVariable Long id) {
         RecordatoriosDto recordatorios = recordatoriosService.getRecordatoriosById(id);
@@ -37,11 +36,13 @@ public class RecordatoriosController {
         }
         return ResponseEntity.ok(recordatorios);
     }
+
     //Registrar recordatorio
     @PostMapping("registrar-recordatorio")
     public ResponseEntity<RecordatoriosDto> create(@RequestBody RecordatoriosDto recordatoriosDto) {
         return new ResponseEntity<>(recordatoriosService.save(recordatoriosDto), HttpStatus.CREATED);
     }
+
     //Mostrar recordatprios entre un periodo de fechas
     @GetMapping("recordatorio-periodo")
     public ResponseEntity<List<RecordatoriosPorPeriodoDeFechasDto>> ListaRecordatoriosEnPeriodo (

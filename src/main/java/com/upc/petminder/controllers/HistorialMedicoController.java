@@ -2,9 +2,7 @@ package com.upc.petminder.controllers;
 
 import com.upc.petminder.dtos.HistorialMedicoDTO.HistorialMedicoDto;
 import com.upc.petminder.dtos.HistorialMedicoDTO.HistorialMedicoPorMascotaYFechaDto;
-import com.upc.petminder.entities.HistorialMedico;
 import com.upc.petminder.serviceinterfaces.HistorialMedicoService;
-import org.modelmapper.ModelMapper;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +43,7 @@ public class HistorialMedicoController {
         return new ResponseEntity<>(historialMedicoService.save(historialMedicoDto), HttpStatus.CREATED);
     }
 
+    //Listar historial medico por mascota y un periodo de fecha
     @GetMapping("/historial-medico-mascota-fecha")
     public ResponseEntity<List<HistorialMedicoPorMascotaYFechaDto>> listHistorialMedicoPorMascotaYFecha(
             @RequestParam("mascotaId") Long mascotaId,
@@ -64,7 +63,7 @@ public class HistorialMedicoController {
     }
 
     //Eliminar Historial Medico
-    @DeleteMapping("/historialdelete/{id}")
+    @DeleteMapping("/historial-delete/{id}")
     @PreAuthorize("hasAuthority('VETERINARY')")
     public void delete(@PathVariable("id") Long id)
     {

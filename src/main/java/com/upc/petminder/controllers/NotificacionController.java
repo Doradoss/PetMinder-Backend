@@ -3,9 +3,7 @@ package com.upc.petminder.controllers;
 
 import com.upc.petminder.dtos.NotificacionDTO.NotificacionDto;
 import com.upc.petminder.dtos.NotificacionDTO.NotificacionNoLeidaXusuarioDto;
-import com.upc.petminder.entities.Notificacion;
 import com.upc.petminder.serviceinterfaces.NotificacionService;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +20,13 @@ public class NotificacionController {
     public NotificacionController(NotificacionService notificacionService) {
         this.notificacionService = notificacionService;
     }
-    //Listar notificaciones
+    //Listar Notificaciones
     @GetMapping("/findall-notificacion")
     public ResponseEntity<List<NotificacionDto>> findAll() {
         return ResponseEntity.ok(notificacionService.findAll());
     }
 
+    //Listar Notificaciones por Id
     @GetMapping("/notificacion/{id}")
     public ResponseEntity<NotificacionDto> findById(@PathVariable Long id) {
         NotificacionDto notificacionDto = notificacionService.getNotificacionById(id);
@@ -42,7 +41,7 @@ public class NotificacionController {
         return new ResponseEntity<>(notificacionService.save(notificacionDto), HttpStatus.CREATED);
     }
 
-    //Notificaciones sin leer
+    //Listar Notificaciones sin leer
     @GetMapping("/notificacion-sin-leer")
     public ResponseEntity<List<NotificacionNoLeidaXusuarioDto>> buscarNotificacionesnoLeidas(
             @RequestParam("user_id") Integer user_id) {

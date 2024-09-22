@@ -37,6 +37,7 @@ public class DietaService {
         return dietaDtos;
     }
 
+    //Inserta Dieta
     public DietaDto save(DietaDto dietaDto) {
         ModelMapper modelMapper = new ModelMapper();
         Dieta dieta = modelMapper.map(dietaDto, Dieta.class);

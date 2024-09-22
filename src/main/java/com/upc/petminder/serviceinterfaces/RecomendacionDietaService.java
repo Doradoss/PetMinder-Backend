@@ -63,7 +63,7 @@ public class RecomendacionDietaService {
         return dto;
     }
 
-
+    //Inserta Recomendacion Dieta
     public RecomendacionDietaDto save(RecomendacionDietaDto recomendacionDietaDto) {
         ModelMapper modelMapper = new ModelMapper();
         RecomendacionDieta recomendacionDieta = modelMapper.map(recomendacionDietaDto, RecomendacionDieta.class);
@@ -83,19 +83,8 @@ public class RecomendacionDietaService {
 
         return recomendacionDietaDto;
     }
-    private RecomendacionDieta convertToEntity(RecomendacionDietaDto dto) {
-        ModelMapper modelMapper = new ModelMapper();
-        RecomendacionDieta recomendacionDieta = modelMapper.map(dto, RecomendacionDieta.class);
 
-        // Asignar la dieta, mascota y tipo de recordatorio
-        recomendacionDieta.setDieta(dietaRepository.findById(dto.getDieta_id()).orElse(null));
-        recomendacionDieta.setMascota(mascotaRepository.findById(dto.getMascota_id()).orElse(null));
-
-
-        return recomendacionDieta;
-    }
-
-
+    //Listar las Recomendacion de dieta por fecha y un periodo de fechas
     public List<DietaPorMascotaYFechaDto> dietaPorMascotaYFechas(Integer mascotaId, LocalDate fecha) {
         List<Tuple> tuplas = recomendacionDietaRepository.dietasPorMascotaYFecha(mascotaId, fecha);
         List<DietaPorMascotaYFechaDto> ListDietaMascotaPorFecha = new ArrayList<>();

@@ -45,6 +45,7 @@ public class MascotaService {
         return mascotaDtos;
     }
 
+    //Inserta Historial Medico
     public MascotaDto save(MascotaDto mascotaDTO) {
         ModelMapper modelMapper = new ModelMapper();
         Mascota mascota = modelMapper.map(mascotaDTO, Mascota.class);
@@ -61,6 +62,7 @@ public class MascotaService {
         return mascotaDTO;
     }
 
+    //Obtener total de especies unicas por Mascota
     public TotalMascotasPorEspecieDto totalMascotasPorEspecieDto() {
         Long totalMascotaEspecie = mascotaRepository.TotalMascotasPorEspecie();
         TotalMascotasPorEspecieDto totalMascotaEspecieDTO = new TotalMascotasPorEspecieDto();

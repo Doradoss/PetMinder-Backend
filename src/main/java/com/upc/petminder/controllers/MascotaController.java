@@ -23,12 +23,13 @@ public class MascotaController {
         this.mascotaService = mascotaService;
     }
 
-
+    //Listar todas las Mascotas existentes
     @GetMapping("/findall-mascota")
     public ResponseEntity<List<MascotaDto>> findAll() {
         return ResponseEntity.ok(mascotaService.findAll());
     }
 
+    //Listar las Mascotas por id
     @GetMapping("/mascota/{id}")
     public ResponseEntity<MascotaDto> findById(@PathVariable Long id) {
         MascotaDto mascotaDto = mascotaService.getMascotaById(id);
@@ -38,13 +39,15 @@ public class MascotaController {
         return ResponseEntity.ok(mascotaDto);
     }
 
+    //Registrar Mascota
     @PostMapping("/registrar-mascota")
     public ResponseEntity<MascotaDto> create(@RequestBody MascotaDto mascotaDto) {
         return new ResponseEntity<>(mascotaService.save(mascotaDto), HttpStatus.CREATED);
     }
 
-    @GetMapping("/totalmascotaespecie")
-    public ResponseEntity<TotalMascotasPorEspecieDto> ListaRecordatoriosEnPeriodo (){
+    //Obtiene el total de especie unicas de Mascota
+    @GetMapping("/total-mascota-especie")
+    public ResponseEntity<TotalMascotasPorEspecieDto> ListaTotalMascotasPorEspecie (){
         return ResponseEntity.ok(mascotaService.totalMascotasPorEspecieDto());
     }
 

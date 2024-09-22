@@ -21,11 +21,13 @@ public class TipoRecordatorioController {
         this.tipoRecordatorioService = tipoRecordatorioService;
     }
 
+    //Listar todos los Tipos de Recordatorio
     @GetMapping("/findall-tipo-recordatorio")
     public ResponseEntity<List<TipoRecordatorioDto>> findAll() {
         return ResponseEntity.ok(tipoRecordatorioService.findAll());
     }
 
+    //Listar los Tipos de Recordatorio por Id
     @GetMapping("/tipo-recordatorio/{id}")
     public ResponseEntity<TipoRecordatorioDto> findById(@PathVariable Long id) {
         TipoRecordatorioDto tipoRecordatorioDto = tipoRecordatorioService.getTipoRecordatorioById(id);
@@ -35,6 +37,7 @@ public class TipoRecordatorioController {
         return ResponseEntity.ok(tipoRecordatorioDto);
     }
 
+    //Registrar Tipos de Recordatorio
     @PostMapping("/registrar-tipo-recordatorio")
     @PreAuthorize("hasAuthority('VETERINARY')")
     public ResponseEntity<TipoRecordatorioDto> create(@RequestBody TipoRecordatorioDto tipoRecordatorioDto) {

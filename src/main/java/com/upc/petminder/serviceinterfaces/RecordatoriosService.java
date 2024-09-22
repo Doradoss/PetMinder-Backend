@@ -74,7 +74,7 @@ public class RecordatoriosService {
         return dto;
     }
 
-
+    //Inserta Recordatorios
     public RecordatoriosDto save(RecordatoriosDto recordatoriosDto) {
         ModelMapper modelMapper = new ModelMapper();
 
@@ -106,19 +106,7 @@ public class RecordatoriosService {
         return recordatoriosDto;
     }
 
-    private Recordatorios convertToEntity(RecordatoriosDto dto) {
-        ModelMapper modelMapper = new ModelMapper();
-        Recordatorios recordatorios = modelMapper.map(dto, Recordatorios.class);
-
-        // Asegúrate de establecer las relaciones necesarias, por ejemplo:
-        recordatorios.setMascota(mascotaRepository.findById(dto.getMascota_id()).orElse(null));
-        recordatorios.setTipo_recordatorio(tipoRecordatorioRepository.findById(dto.getTipo_recordatorio_id()).orElse(null));
-        // Y también el usuario, si es necesario
-        // recordatorios.setUsers(userRepository.findById(dto.getUsuario_id()).orElse(null));
-
-        return recordatorios;
-    }
-
+    //Listar Recordatorios por periodo
     public List<RecordatoriosPorPeriodoDeFechasDto> recordatoriosPorPeriodo (LocalDate from, LocalDate to){
         List<Tuple> tuples = recordatoriosRepository.recordatoriosPorPeriodo(from, to);
         List<RecordatoriosPorPeriodoDeFechasDto> ListRecordatoriosEnPeriodo = new ArrayList<>();
@@ -134,6 +122,8 @@ public class RecordatoriosService {
         }
         return ListRecordatoriosEnPeriodo;
     }
+
+    //Listar Recordatorios por tipo
     public List<RecordatoriosPorTipoDto> recordatoriosPorTipo (Long tipoRecordatorioId) {
         List<Tuple> tuples = recordatoriosRepository.recordatoriosPorTipo(tipoRecordatorioId);
         List<RecordatoriosPorTipoDto> listRecordatoriosPorTipo = new ArrayList<>();
@@ -152,6 +142,7 @@ public class RecordatoriosService {
         return listRecordatoriosPorTipo;
     }
 
+    //Listar Recordatorios por mascota
     public List<RecordatorioPorMascotaDto> recordatoriosPorMascota (Long mascotaId) {
         List<Tuple> tuples = recordatoriosRepository.recordatorioPorMascota(mascotaId);
         List<RecordatorioPorMascotaDto> listRecordatoriosPorMascota = new ArrayList<>();

@@ -58,7 +58,7 @@ public class HistorialMedicoService {
         return dto;
     }
 
-
+    //Inserta Historial Medico
     public HistorialMedicoDto save(HistorialMedicoDto historialMedicoDto) {
         ModelMapper modelMapper = new ModelMapper();
         HistorialMedico historialMedico = modelMapper.map(historialMedicoDto, HistorialMedico.class);
@@ -101,10 +101,12 @@ public class HistorialMedicoService {
         return historialMedicoActualizadoDto;
     }
 
+    //Eliminar Historial Medico
     public void delete(Long id) {
         historialMedicoRepository.deleteById(id);
     }
 
+    //Listar Historial Medico Por Mascota Y Fecha
     public List<HistorialMedicoPorMascotaYFechaDto> historialMedicoPorMascotaYFecha(Long mascotaId, LocalDate from, LocalDate to) {
         List<Tuple> tuples = historialMedicoRepository.historialMedicoPorMascotaYFecha(mascotaId, from, to);
         List<HistorialMedicoPorMascotaYFechaDto> ListHistorialMedicoPorMascotaYFecha = new ArrayList<>();

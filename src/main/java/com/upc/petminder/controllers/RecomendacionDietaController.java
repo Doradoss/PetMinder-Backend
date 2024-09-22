@@ -4,9 +4,7 @@ package com.upc.petminder.controllers;
 import com.upc.petminder.dtos.RecomendacionDietaDTO.DietaPorMascotaDto;
 import com.upc.petminder.dtos.RecomendacionDietaDTO.DietaPorMascotaYFechaDto;
 import com.upc.petminder.dtos.RecomendacionDietaDTO.RecomendacionDietaDto;;
-import com.upc.petminder.entities.RecomendacionDieta;
 import com.upc.petminder.serviceinterfaces.RecomendacionDietaService;
-import org.modelmapper.ModelMapper;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +25,13 @@ public class RecomendacionDietaController {
         this.recomendacionDietaService = recomendacionDietaService;
     }
 
-    //Listar todas las recomendaciones de dieta
+    //Listar todas las Recomendaciones de Dieta
     @GetMapping("/findall-recomendacion-dieta")
     public ResponseEntity<List<RecomendacionDietaDto>> findAll() {
         return ResponseEntity.ok(recomendacionDietaService.findAll());
     }
 
+    //Listar Recomendaciones de Dieta por Id
     @GetMapping("/recomendacion-dieta/{id}")
     public ResponseEntity<RecomendacionDietaDto> findById(@PathVariable Long id) {
         RecomendacionDietaDto recomendacionDietaDto = recomendacionDietaService.getRecomendacionDietaById(id);

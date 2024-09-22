@@ -57,7 +57,7 @@ public class NotificacionService {
         return dto;
     }
 
-
+    //Inserta Notificacion
     public NotificacionDto save(NotificacionDto notificacionDto) {
         ModelMapper modelMapper = new ModelMapper();
         Notificacion notificacion = modelMapper.map(notificacionDto, Notificacion.class);
@@ -75,14 +75,6 @@ public class NotificacionService {
         return notificacionDto;
     }
 
-    private Notificacion convertToEntity(NotificacionDto dto) {
-        ModelMapper modelMapper = new ModelMapper();
-        Notificacion notificacion = modelMapper.map(dto, Notificacion.class);
-
-        notificacion.setUsers(userRepository.findById(dto.getUsuario_id()).orElse(null));
-
-        return notificacion;
-    }
 
     //Dieta por IdMascota
     public List<NotificacionNoLeidaXusuarioDto> noLeidaXusuario(Integer user_id) {

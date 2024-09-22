@@ -37,6 +37,7 @@ public class TipoRecordatorioService {
         return tipoDtos;
     }
 
+    //Insertar Tipo de Recordatorio
     public TipoRecordatorioDto save(TipoRecordatorioDto tipoRecordatorioDto) {
         ModelMapper modelMapper = new ModelMapper();
         TipoRecordatorio tipoRecordatorio = modelMapper.map(tipoRecordatorioDto, TipoRecordatorio.class);

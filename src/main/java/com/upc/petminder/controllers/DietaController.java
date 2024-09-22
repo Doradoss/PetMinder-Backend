@@ -29,7 +29,7 @@ public class DietaController {
         return ResponseEntity.ok(dietaService.findAll());
     }
 
-
+    //Listar Dietas por id
     @GetMapping("/dieta/{id}")
     public ResponseEntity<DietaDto> findById(@PathVariable Long id) {
         DietaDto dietaDto = dietaService.getDietaById(id);

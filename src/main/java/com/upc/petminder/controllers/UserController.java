@@ -1,11 +1,9 @@
 package com.upc.petminder.controllers;
 
-import com.upc.petminder.dtos.HistorialMedicoDTO.HistorialMedicoDto;
 import com.upc.petminder.dtos.UserDTO.UserDto;
 import com.upc.petminder.serviceinterfaces.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,10 +18,12 @@ public class UserController {
         this.userService = userService;
     }
 
+    //Listar todos los Users existentes
     @GetMapping("/api/user/findall-users")
     public ResponseEntity<List<UserDto>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
+
     //Registrar usuario
     @PostMapping("api/libre/registrar-user")
     public ResponseEntity<UserDto> create(@RequestBody UserDto userDto) {
