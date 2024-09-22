@@ -17,5 +17,6 @@ public class HistorialMedicoDto {
     private String diagnostico;
     private String tratamiento;
     private LocalDate fecha;
+
     private Long mascota_id;
 }

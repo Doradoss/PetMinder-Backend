@@ -23,7 +23,7 @@ public class RecordatoriosController {
     public RecordatoriosController(RecordatoriosService recordatoriosService) {
         this.recordatoriosService = recordatoriosService;
     }
-
+    //Listar recordatorios
     @GetMapping("/findall-recordatorios")
     public ResponseEntity<List<RecordatoriosDto>> findAll() {
         return ResponseEntity.ok(recordatoriosService.findAll());
@@ -80,14 +80,14 @@ public class RecordatoriosController {
         return ResponseEntity.ok(recordatoriosService.contarrecordatoriosPorMascota(mascotaId));
     }
 
-    @PutMapping("/recordatorios/{id}")
+    @PutMapping("/modificar-recordatorios/{id}")
     public void updateRecordatorios(@RequestBody RecordatoriosDto dto) {
         ModelMapper m = new ModelMapper();
         Recordatorios recordatorios = m.map(dto, Recordatorios.class);
         recordatoriosService.insert(recordatorios);
     }
 
-    @DeleteMapping("/recordatoriodelete/{id}")
+    @DeleteMapping("/eliminar-recordatorio/{id}")
     public void delete(@PathVariable("id") Long id){
         recordatoriosService.delete(id);
     }

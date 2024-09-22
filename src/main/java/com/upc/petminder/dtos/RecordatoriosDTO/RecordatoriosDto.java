@@ -16,9 +16,9 @@ public class RecordatoriosDto {
     private String descripcion;
     private LocalDate fecha;
     private LocalTime hora;
+    private Boolean completado;
 
     private Long tipo_recordatorio_id;
     private Long usuario_id;
     private Long mascota_id;
-    private Boolean completado;
 }

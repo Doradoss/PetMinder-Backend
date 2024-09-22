@@ -75,9 +75,30 @@ public class HistorialMedicoService {
         return historialMedicoDto;
     }
 
+    //actualizar HistorialMedico
+    public HistorialMedicoDto updateHistorialMedico(Long id, HistorialMedicoDto historialMedicoDto) {
+        // Buscar el historial médico existente
+        HistorialMedico historialMedicoExistente = historialMedicoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Historial Médico no encontrado"));
 
-    public void insert(HistorialMedico historialMedico) {
-        historialMedicoRepository.save(historialMedico);
+        // Mapear los nuevos datos del DTO al historial existente
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.map(historialMedicoDto, historialMedicoExistente);
+
+        // Obtener la mascota asociada al mascota_id del DTO
+        Mascota mascota = mascotaRepository.findById(historialMedicoDto.getMascota_id())
+                .orElseThrow(() -> new IllegalArgumentException("Mascota no encontrada"));
+
+        // Asignar la mascota al historial médico
+        historialMedicoExistente.setMascota(mascota);
+
+        // Guardar el historial médico actualizado
+        HistorialMedico historialMedicoActualizado = historialMedicoRepository.save(historialMedicoExistente);
+
+        // Mapear la entidad actualizada al DTO y devolverla
+        HistorialMedicoDto historialMedicoActualizadoDto = modelMapper.map(historialMedicoActualizado, HistorialMedicoDto.class);
+        historialMedicoActualizadoDto.setMascota_id(mascota.getId());  // Asegurarse de incluir el ID de la mascota en el DTO
+        return historialMedicoActualizadoDto;
     }
 
     public void delete(Long id) {

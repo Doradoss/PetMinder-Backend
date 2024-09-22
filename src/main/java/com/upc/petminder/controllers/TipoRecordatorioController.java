@@ -13,7 +13,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/user/")
+@RequestMapping("/api/user")
 public class TipoRecordatorioController {
     final TipoRecordatorioService tipoRecordatorioService;
 
@@ -35,7 +35,7 @@ public class TipoRecordatorioController {
         return ResponseEntity.ok(tipoRecordatorioDto);
     }
 
-    @PostMapping("registrar-tipo-recordatorio")
+    @PostMapping("/registrar-tipo-recordatorio")
     @PreAuthorize("hasAuthority('VETERINARY')")
     public ResponseEntity<TipoRecordatorioDto> create(@RequestBody TipoRecordatorioDto tipoRecordatorioDto) {
         return new ResponseEntity<>(tipoRecordatorioService.save(tipoRecordatorioDto), HttpStatus.CREATED);

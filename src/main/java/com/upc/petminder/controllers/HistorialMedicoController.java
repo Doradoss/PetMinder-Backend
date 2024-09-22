@@ -28,7 +28,7 @@ public class HistorialMedicoController {
     public ResponseEntity<List<HistorialMedicoDto>> findAll() {
         return ResponseEntity.ok(historialMedicoService.findAll());
     }
-
+    //Historial Medico por mascota id
     @GetMapping("/historial/{id}")
     public ResponseEntity<HistorialMedicoDto> findById(@PathVariable Long id) {
         HistorialMedicoDto historialMedicoDto = historialMedicoService.getHistorialMedicoById(id);
@@ -52,13 +52,16 @@ public class HistorialMedicoController {
         return ResponseEntity.ok(historialMedicoService.historialMedicoPorMascotaYFecha(mascotaId, from, to));
     }
 
-    @PutMapping("/historialmedico/{id}")
-    public void updateHistorialMedico(@RequestBody HistorialMedicoDto dto) {
-        ModelMapper m = new ModelMapper();
-        HistorialMedico historialMedico = m.map(dto, HistorialMedico.class);
-        historialMedicoService.insert(historialMedico);
+    //Actualizar Historial Medico
+    @PutMapping("/actualizar-historialmedico/{id}")
+    public ResponseEntity<HistorialMedicoDto> updateHistorialMedico(@PathVariable Long id, @RequestBody HistorialMedicoDto dto) {
+        // Llamar al servicio para actualizar el historial médico
+        HistorialMedicoDto updatedDto = historialMedicoService.updateHistorialMedico(id, dto);
+
+        return ResponseEntity.ok(updatedDto);  // Devolver el DTO actualizado en la respuesta
     }
 
+    //Eliminar Historial Medico
     @DeleteMapping("/historialdelete/{id}")
     public void delete(@PathVariable("id") Long id)
     {
