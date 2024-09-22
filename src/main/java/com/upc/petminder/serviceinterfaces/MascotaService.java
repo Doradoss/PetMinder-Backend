@@ -79,4 +79,38 @@ public class MascotaService {
         return dto;
     }
 
+    // Actualizar una mascota
+    public MascotaDto update(Long id, MascotaDto mascotaDto) {
+        // Buscar la mascota existente
+        Mascota existingMascota = mascotaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Mascota no encontrada"));
+
+        // Mapear los nuevos datos del DTO a la mascota existente
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.map(mascotaDto, existingMascota);
+
+        // Obtener el usuario asociado al usuario_id del DTO
+        Users usuario = userRepository.findById(mascotaDto.getUsuario_id())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        // Asignar el usuario a la mascota
+        existingMascota.setUsers(usuario);
+
+        // Guardar la mascota actualizada
+        Mascota updatedMascota = mascotaRepository.save(existingMascota);
+
+        // Mapear la entidad actualizada al DTO y devolverla
+        MascotaDto updatedMascotaDto = modelMapper.map(updatedMascota, MascotaDto.class);
+        updatedMascotaDto.setUsuario_id(usuario.getId());
+        return updatedMascotaDto;
+    }
+
+    //Eliminar mascota
+    public void delete(Long id) {
+        Mascota mascota = mascotaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Mascota no encontrada"));
+        // Eliminar la mascota
+        mascotaRepository.delete(mascota);
+    }
+
 }

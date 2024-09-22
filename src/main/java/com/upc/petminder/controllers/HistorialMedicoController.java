@@ -23,8 +23,8 @@ public class HistorialMedicoController {
     public HistorialMedicoController(HistorialMedicoService historialMedicoService) {
         this.historialMedicoService = historialMedicoService;
     }
-
-    @GetMapping("/findall-historialmedico")
+    //Listar Historiales medicos
+    @GetMapping("/findall-historial-medico")
     public ResponseEntity<List<HistorialMedicoDto>> findAll() {
         return ResponseEntity.ok(historialMedicoService.findAll());
     }
@@ -38,7 +38,8 @@ public class HistorialMedicoController {
         return ResponseEntity.ok(historialMedicoDto);
     }
 
-    @PostMapping("/registrar-historial-medico") //Problemas con el id mascota
+    //Registrar Historial Medico
+    @PostMapping("/registrar-historial-medico")
     @PreAuthorize("hasAuthority('VETERINARY')")
     public ResponseEntity<HistorialMedicoDto> create(@RequestBody HistorialMedicoDto historialMedicoDto) {
         return new ResponseEntity<>(historialMedicoService.save(historialMedicoDto), HttpStatus.CREATED);
@@ -54,8 +55,9 @@ public class HistorialMedicoController {
 
     //Actualizar Historial Medico
     @PutMapping("/actualizar-historialmedico/{id}")
+    @PreAuthorize("hasAuthority('VETERINARY')")
     public ResponseEntity<HistorialMedicoDto> updateHistorialMedico(@PathVariable Long id, @RequestBody HistorialMedicoDto dto) {
-        // Llamar al servicio para actualizar el historial médico
+        // Llamar al service para actualizar el historial médico
         HistorialMedicoDto updatedDto = historialMedicoService.updateHistorialMedico(id, dto);
 
         return ResponseEntity.ok(updatedDto);  // Devolver el DTO actualizado en la respuesta
@@ -63,6 +65,7 @@ public class HistorialMedicoController {
 
     //Eliminar Historial Medico
     @DeleteMapping("/historialdelete/{id}")
+    @PreAuthorize("hasAuthority('VETERINARY')")
     public void delete(@PathVariable("id") Long id)
     {
         historialMedicoService.delete(id);

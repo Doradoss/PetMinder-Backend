@@ -37,7 +37,7 @@ public class RecordatoriosController {
         }
         return ResponseEntity.ok(recordatorios);
     }
-
+    //Registrar recordatorio
     @PostMapping("registrar-recordatorio")
     public ResponseEntity<RecordatoriosDto> create(@RequestBody RecordatoriosDto recordatoriosDto) {
         return new ResponseEntity<>(recordatoriosService.save(recordatoriosDto), HttpStatus.CREATED);
@@ -80,16 +80,18 @@ public class RecordatoriosController {
         return ResponseEntity.ok(recordatoriosService.contarrecordatoriosPorMascota(mascotaId));
     }
 
-    @PutMapping("/modificar-recordatorios/{id}")
-    public void updateRecordatorios(@RequestBody RecordatoriosDto dto) {
-        ModelMapper m = new ModelMapper();
-        Recordatorios recordatorios = m.map(dto, Recordatorios.class);
-        recordatoriosService.insert(recordatorios);
+    // Modificar Recordatorio
+    @PutMapping("/actualizar-recordatorio/{id}")
+    public ResponseEntity<RecordatoriosDto> update(@PathVariable Long id, @RequestBody RecordatoriosDto recordatoriosDto) {
+        RecordatoriosDto updatedRecordatorioDto = recordatoriosService.update(id, recordatoriosDto);
+        return ResponseEntity.ok(updatedRecordatorioDto);  // Devolver el DTO actualizado
     }
 
+    // Eliminar Recordatorio
     @DeleteMapping("/eliminar-recordatorio/{id}")
-    public void delete(@PathVariable("id") Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         recordatoriosService.delete(id);
+        return ResponseEntity.noContent().build();  // Devolver un status 204 No Content
     }
 
 }

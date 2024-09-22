@@ -38,7 +38,7 @@ public class NotificacionService {
 
             // Obtener la clave foránea de Usuario y asignarla al DTO
             Users usuario = notificacion.getUsers();
-            notificacionDto.setUsuarioId(usuario.getId());
+            notificacionDto.setUsuario_id(usuario.getId());
 
             notificacionDtos.add(notificacionDto);
         }
@@ -53,7 +53,7 @@ public class NotificacionService {
 
         ModelMapper modelMapper = new ModelMapper();
         NotificacionDto dto = modelMapper.map(notificacion, NotificacionDto.class);
-        dto.setUsuarioId(notificacion.getUsers().getId());
+        dto.setUsuario_id(notificacion.getUsers().getId());
         return dto;
     }
 
@@ -61,16 +61,16 @@ public class NotificacionService {
     public NotificacionDto save(NotificacionDto notificacionDto) {
         ModelMapper modelMapper = new ModelMapper();
         Notificacion notificacion = modelMapper.map(notificacionDto, Notificacion.class);
-        Users users = userRepository.findById(notificacionDto.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
+        Users users = userRepository.findById(notificacionDto.getUsuario_id())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
 
         notificacion.setUsers(users);
 
         notificacion = notificacionRepository.save(notificacion);
 
         modelMapper.map(notificacion, notificacionDto);
-        notificacionDto.setUsuarioId(notificacion.getUsers().getId());
+        notificacionDto.setUsuario_id(notificacion.getUsers().getId());
 
         return notificacionDto;
     }
@@ -79,24 +79,9 @@ public class NotificacionService {
         ModelMapper modelMapper = new ModelMapper();
         Notificacion notificacion = modelMapper.map(dto, Notificacion.class);
 
-        notificacion.setUsers(userRepository.findById(dto.getUsuarioId()).orElse(null));
+        notificacion.setUsers(userRepository.findById(dto.getUsuario_id()).orElse(null));
 
         return notificacion;
-    }
-
-    public void updateNotificacion(Long id, Notificacion notificacion) {
-
-        NotificacionDto existingNotificacion = getNotificacionById(id);
-        if (existingNotificacion != null) {
-                        existingNotificacion.setTitulo(notificacion.getTitulo());
-                        existingNotificacion.setMensaje(notificacion.getMensaje());
-                        existingNotificacion.setLeido(notificacion.getLeido());
-                        existingNotificacion.setFechaCreacion(notificacion.getFechaCreacion());
-                        existingNotificacion.setUsuarioId(notificacion.getUsers().getId());
-
-                        Notificacion updatedNotificacion = convertToEntity(existingNotificacion);
-                        notificacionRepository.save(updatedNotificacion);
-        };
     }
 
     //Dieta por IdMascota
@@ -116,12 +101,36 @@ public class NotificacionService {
         return ListnoLeidoxUsuario;
     }
 
-    public void insert(Notificacion notificacion) {
-        notificacionRepository.save(notificacion);
+    //Modificar Notificacion
+    public NotificacionDto update(Long id, NotificacionDto notificacionDto) {
+        // Buscar la notificación existente
+        Notificacion existingNotificacion = notificacionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Notificación no encontrada"));
+
+        // Mapear los nuevos datos del DTO a la notificación existente
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.map(notificacionDto, existingNotificacion);
+
+        // Asignar el usuario a la notificación
+        Users usuario = userRepository.findById(notificacionDto.getUsuario_id())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+        existingNotificacion.setUsers(usuario);
+
+        // Guardar la notificación actualizada
+        Notificacion updatedNotificacion = notificacionRepository.save(existingNotificacion);
+
+        // Mapear la entidad actualizada al DTO y devolverla
+        NotificacionDto updatedNotificacionDto = modelMapper.map(updatedNotificacion, NotificacionDto.class);
+        updatedNotificacionDto.setUsuario_id(usuario.getId());
+        return updatedNotificacionDto;
     }
 
+    // Eliminar una notificación por ID
     public void delete(Long id) {
-        notificacionRepository.deleteById(id);
-    }
+        Notificacion notificacion = notificacionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Notificación no encontrada"));
 
+        // Eliminar la notificación
+        notificacionRepository.delete(notificacion);
+    }
 }

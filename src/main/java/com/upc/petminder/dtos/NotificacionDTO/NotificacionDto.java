@@ -16,6 +16,7 @@ public class NotificacionDto {
     private String mensaje;
     private Boolean leido;
     private LocalDate fechaCreacion;
-    private Long usuarioId;
+
+    private Long usuario_id;
 }
 

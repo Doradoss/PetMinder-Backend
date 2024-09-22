@@ -58,6 +58,7 @@ public class WebSecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 .requestMatchers("/authenticate").permitAll() //.hasAuthority("ADMIN")
+                .requestMatchers("/api/libre/**").permitAll()
                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                 .requestMatchers("/api/veterinary/**").hasAuthority("VETERINARY")
                 .requestMatchers("/api/user/**").hasAuthority("USER")

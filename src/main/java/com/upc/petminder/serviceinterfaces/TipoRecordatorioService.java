@@ -54,5 +54,31 @@ public class TipoRecordatorioService {
         return dto;
     }
 
+    //Modificar tipo recordatorio
+    public TipoRecordatorioDto update(Long id, TipoRecordatorioDto tipoRecordatorioDto) {
+        // Buscar el tipo de recordatorio existente
+        TipoRecordatorio existingTipoRecordatorio = tipoRecordatorioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Tipo de recordatorio no encontrado"));
 
+        // Mapear los nuevos datos del DTO al tipo de recordatorio existente
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.map(tipoRecordatorioDto, existingTipoRecordatorio);
+
+        // Guardar el tipo de recordatorio actualizado
+        TipoRecordatorio updatedTipoRecordatorio = tipoRecordatorioRepository.save(existingTipoRecordatorio);
+
+        // Mapear la entidad actualizada al DTO y devolverla
+        return modelMapper.map(updatedTipoRecordatorio, TipoRecordatorioDto.class);
+    }
+
+    // Eliminar un tipo de recordatorio
+    public void delete(Long id) {
+        // Verificar si el tipo de recordatorio existe
+        if (!tipoRecordatorioRepository.existsById(id)) {
+            throw new IllegalArgumentException("Tipo de recordatorio no encontrado");
+        }
+
+        // Eliminar el tipo de recordatorio
+        tipoRecordatorioRepository.deleteById(id);
+    }
 }

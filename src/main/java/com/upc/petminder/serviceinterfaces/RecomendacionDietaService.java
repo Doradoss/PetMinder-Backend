@@ -95,18 +95,6 @@ public class RecomendacionDietaService {
         return recomendacionDieta;
     }
 
-    public void updateRecomendacionDieta(Long id, RecomendacionDieta recomendacionDieta) {
-        RecomendacionDietaDto existingRecomendacionDieta = getRecomendacionDietaById(id);
-        if (existingRecomendacionDieta != null) {
-            existingRecomendacionDieta.setFecha(recomendacionDieta.getFecha());
-            existingRecomendacionDieta.setDieta_id(recomendacionDieta.getDieta().getId());
-            existingRecomendacionDieta.setMascota_id(recomendacionDieta.getMascota().getId());
-
-            RecomendacionDieta updatedRecomendacionDieta = convertToEntity(existingRecomendacionDieta);
-            recomendacionDietaRepository.save(updatedRecomendacionDieta);
-        }
-    }
-
 
     public List<DietaPorMascotaYFechaDto> dietaPorMascotaYFechas(Integer mascotaId, LocalDate fecha) {
         List<Tuple> tuplas = recomendacionDietaRepository.dietasPorMascotaYFecha(mascotaId, fecha);
@@ -138,11 +126,45 @@ public class RecomendacionDietaService {
         return ListDietaPorMascota;
     }
 
-    public void insert(RecomendacionDieta recomendacionDieta) {
-        recomendacionDietaRepository.save(recomendacionDieta);
+    // Modificar una recomendación de dieta
+    public RecomendacionDietaDto update(Long id, RecomendacionDietaDto recomendacionDietaDto) {
+        // Buscar la recomendación existente
+        RecomendacionDieta existingRecomendacion = recomendacionDietaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Recomendación de dieta no encontrada"));
+
+        // Actualizar los campos relevantes
+        existingRecomendacion.setFecha(recomendacionDietaDto.getFecha());
+
+        // Asignar la dieta a la recomendación
+        Dieta dieta = dietaRepository.findById(recomendacionDietaDto.getDieta_id())
+                .orElseThrow(() -> new IllegalArgumentException("Dieta no encontrada"));
+        existingRecomendacion.setDieta(dieta);
+
+        // Asignar la mascota a la recomendación
+        Mascota mascota = mascotaRepository.findById(recomendacionDietaDto.getMascota_id())
+                .orElseThrow(() -> new IllegalArgumentException("Mascota no encontrada"));
+        existingRecomendacion.setMascota(mascota);
+
+        // Guardar la recomendación de dieta actualizada
+        RecomendacionDieta updatedRecomendacion = recomendacionDietaRepository.save(existingRecomendacion);
+
+        // Mapear la entidad actualizada al DTO y devolverla
+        RecomendacionDietaDto updatedRecomendacionDto = new RecomendacionDietaDto();
+        updatedRecomendacionDto.setId(updatedRecomendacion.getId());
+        updatedRecomendacionDto.setFecha(updatedRecomendacion.getFecha());
+        updatedRecomendacionDto.setDieta_id(dieta.getId());
+        updatedRecomendacionDto.setMascota_id(mascota.getId());
+
+        return updatedRecomendacionDto;
     }
 
+    // Eliminar una recomendación de dieta
     public void delete(Long id) {
-        recomendacionDietaRepository.deleteById(id);
+        RecomendacionDieta recomendacion = recomendacionDietaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Recomendación de dieta no encontrada"));
+
+        // Eliminar la recomendación
+        recomendacionDietaRepository.delete(recomendacion);
     }
+
 }

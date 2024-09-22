@@ -4,6 +4,7 @@ import com.upc.petminder.dtos.UserDTO.UserDto;
 import com.upc.petminder.entities.Users;
 import com.upc.petminder.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -58,8 +59,12 @@ public class UserService {
     }
 
 
-    // Eliminar un usuario
+    // Eliminar una usuario por ID
     public void delete(Long id) {
-        userRepository.deleteById(id);
+        Users users = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrada"));
+
+        // Eliminar la mascota
+        userRepository.delete(users);
     }
 }

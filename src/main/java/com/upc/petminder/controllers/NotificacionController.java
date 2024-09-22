@@ -22,7 +22,7 @@ public class NotificacionController {
     public NotificacionController(NotificacionService notificacionService) {
         this.notificacionService = notificacionService;
     }
-
+    //Listar notificaciones
     @GetMapping("/findall-notificacion")
     public ResponseEntity<List<NotificacionDto>> findAll() {
         return ResponseEntity.ok(notificacionService.findAll());
@@ -36,28 +36,29 @@ public class NotificacionController {
         }
         return ResponseEntity.ok(notificacionDto);
     }
-
-    @PostMapping("/notificacion")
+    //Registrar notificacion
+    @PostMapping("/registrar-notificacion")
     public ResponseEntity<NotificacionDto> create(@RequestBody NotificacionDto notificacionDto) {
         return new ResponseEntity<>(notificacionService.save(notificacionDto), HttpStatus.CREATED);
     }
 
-    //Notificacion sin leer
-    @GetMapping("/notificaciones-sin-leer")
+    //Notificaciones sin leer
+    @GetMapping("/notificacion-sin-leer")
     public ResponseEntity<List<NotificacionNoLeidaXusuarioDto>> buscarNotificacionesnoLeidas(
             @RequestParam("user_id") Integer user_id) {
         return ResponseEntity.ok(notificacionService.noLeidaXusuario(user_id));
     }
 
-    @PutMapping("/notificaciones/{id}")
-    public void updateNotificacion(@RequestBody NotificacionDto dto) {
-        ModelMapper m = new ModelMapper();
-        Notificacion notificacion = m.map(dto, Notificacion.class);
-        notificacionService.insert(notificacion);
+    //Modificar notificaciones
+    @PutMapping("/actualizar-notificacion/{id}")
+    public ResponseEntity<NotificacionDto> update(@PathVariable Long id, @RequestBody NotificacionDto notificacionDto) {
+        NotificacionDto updatedNotificacionDto = notificacionService.update(id, notificacionDto);
+        return ResponseEntity.ok(updatedNotificacionDto);  // Devolver el DTO actualizado
     }
-
-    @DeleteMapping("/notificaciondelete/{id}")
-    public void delete(@PathVariable("id") Long id){
+    //Eliminar notificaciones
+    @DeleteMapping("/eliminar-notificacion/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         notificacionService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -119,22 +119,6 @@ public class RecordatoriosService {
         return recordatorios;
     }
 
-    public void updateRecordatorios(Long id, Recordatorios recordatorios) {
-        RecordatoriosDto existingRecordatorio = getRecordatoriosById(id);
-
-        if (existingRecordatorio != null) {
-            existingRecordatorio.setTitulo(recordatorios.getTitulo());
-            existingRecordatorio.setDescripcion(recordatorios.getDescripcion());
-            existingRecordatorio.setFecha(recordatorios.getFecha());
-            existingRecordatorio.setHora(recordatorios.getHora());
-            existingRecordatorio.setMascota_id(recordatorios.getMascota().getId());
-            existingRecordatorio.setTipo_recordatorio_id(recordatorios.getTipo_recordatorio().getId());
-
-            Recordatorios updatedRecordatorio = convertToEntity(existingRecordatorio);
-            recordatoriosRepository.save(updatedRecordatorio);
-        };
-    }
-
     public List<RecordatoriosPorPeriodoDeFechasDto> recordatoriosPorPeriodo (LocalDate from, LocalDate to){
         List<Tuple> tuples = recordatoriosRepository.recordatoriosPorPeriodo(from, to);
         List<RecordatoriosPorPeriodoDeFechasDto> ListRecordatoriosEnPeriodo = new ArrayList<>();
@@ -214,11 +198,55 @@ public class RecordatoriosService {
         return listCuentaRecordatoriosPorMascota;
     }
 
-    public void insert(Recordatorios recordatorios) {
-        recordatoriosRepository.save(recordatorios);
+    //Modificar Recordatorio
+    public RecordatoriosDto update(Long id, RecordatoriosDto recordatorioDto) {
+        // Buscar el recordatorio existente
+        Recordatorios existingRecordatorio = recordatoriosRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Recordatorio no encontrado"));
+
+        // Mapear los nuevos datos del DTO al recordatorio existente
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.map(recordatorioDto, existingRecordatorio);
+
+        // Obtener el tipo de recordatorio asociado al tipo_recordatorio_id del DTO
+        TipoRecordatorio tipoRecordatorio = tipoRecordatorioRepository.findById(recordatorioDto.getTipo_recordatorio_id())
+                .orElseThrow(() -> new IllegalArgumentException("Tipo de recordatorio no encontrado"));
+
+        // Asignar el tipo de recordatorio al recordatorio
+        existingRecordatorio.setTipo_recordatorio(tipoRecordatorio);
+
+        // Obtener el usuario asociado al usuario_id del DTO
+        Users usuario = usersRepository.findById(recordatorioDto.getUsuario_id())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        // Asignar el usuario al recordatorio
+        existingRecordatorio.setUsers(usuario);
+
+        // Obtener la mascota asociada a mascota_id del DTO
+        Mascota mascota = mascotaRepository.findById(recordatorioDto.getMascota_id())
+                .orElseThrow(() -> new IllegalArgumentException("Mascota no encontrada"));
+
+        // Asignar la mascota al recordatorio
+        existingRecordatorio.setMascota(mascota);
+
+        // Guardar el recordatorio actualizado
+        Recordatorios updatedRecordatorio = recordatoriosRepository.save(existingRecordatorio);
+
+        // Mapear la entidad actualizada al DTO y devolverla
+        RecordatoriosDto updatedRecordatorioDto = modelMapper.map(updatedRecordatorio, RecordatoriosDto.class);
+        updatedRecordatorioDto.setTipo_recordatorio_id(tipoRecordatorio.getId());
+        updatedRecordatorioDto.setUsuario_id(usuario.getId());
+        updatedRecordatorioDto.setMascota_id(mascota.getId());
+        return updatedRecordatorioDto;
     }
 
+    //Eliminar Recordatorio
     public void delete(Long id) {
-        recordatoriosRepository.deleteById(id);
+        // Buscar el recordatorio existente
+        Recordatorios recordatorio = recordatoriosRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Recordatorio no encontrado"));
+
+        // Eliminar el recordatorio
+        recordatoriosRepository.delete(recordatorio);
     }
 }

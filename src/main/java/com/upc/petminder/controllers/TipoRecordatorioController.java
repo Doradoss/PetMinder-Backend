@@ -21,12 +21,12 @@ public class TipoRecordatorioController {
         this.tipoRecordatorioService = tipoRecordatorioService;
     }
 
-    @GetMapping("/findall-tiporecordatorio")
+    @GetMapping("/findall-tipo-recordatorio")
     public ResponseEntity<List<TipoRecordatorioDto>> findAll() {
         return ResponseEntity.ok(tipoRecordatorioService.findAll());
     }
 
-    @GetMapping("/tiporecordatorio/{id}")
+    @GetMapping("/tipo-recordatorio/{id}")
     public ResponseEntity<TipoRecordatorioDto> findById(@PathVariable Long id) {
         TipoRecordatorioDto tipoRecordatorioDto = tipoRecordatorioService.getTipoRecordatorioById(id);
         if (tipoRecordatorioDto == null) {
@@ -39,5 +39,29 @@ public class TipoRecordatorioController {
     @PreAuthorize("hasAuthority('VETERINARY')")
     public ResponseEntity<TipoRecordatorioDto> create(@RequestBody TipoRecordatorioDto tipoRecordatorioDto) {
         return new ResponseEntity<>(tipoRecordatorioService.save(tipoRecordatorioDto), HttpStatus.CREATED);
+    }
+
+    // Modificar Tipo Recordatorio
+    @PutMapping("/actualizar-tipo-recordatorio/{id}")
+    @PreAuthorize("hasAuthority('VETERINARY')")
+    public ResponseEntity<TipoRecordatorioDto> update(@PathVariable Long id, @RequestBody TipoRecordatorioDto tipoRecordatorioDto) {
+        try {
+            TipoRecordatorioDto updatedTipo = tipoRecordatorioService.update(id, tipoRecordatorioDto);
+            return ResponseEntity.ok(updatedTipo);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Eliminar Tipo Recordatorio
+    @DeleteMapping("/eliminar-tipo-recordatorio/{id}")
+    @PreAuthorize("hasAuthority('VETERINARY')")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        try {
+            tipoRecordatorioService.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

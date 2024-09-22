@@ -12,7 +12,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/user")
+//@RequestMapping("/api/user")
 public class UserController {
     final UserService userService;
 
@@ -20,27 +20,28 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/findall-users")
+    @GetMapping("/api/user/findall-users")
     public ResponseEntity<List<UserDto>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
-
-    @PostMapping("/registrar-user")
+    //Registrar usuario
+    @PostMapping("api/libre/registrar-user")
     public ResponseEntity<UserDto> create(@RequestBody UserDto userDto) {
         return new ResponseEntity<>(userService.save(userDto), HttpStatus.CREATED);
     }
 
-    // Actualizar un usuario
-    @PutMapping("/actualizar-user/{id}")
+    // Modificar un usuario
+    @PutMapping("/api/user/actualizar-user/{id}")
     public ResponseEntity<UserDto> update(@PathVariable Long id, @RequestBody UserDto userDto) {
         // Llamar al service para actualizar el usuario
         UserDto updatedUserDto = userService.update(id, userDto);
 
         return ResponseEntity.ok(updatedUserDto);
     }
-
-    @DeleteMapping("/eliminar-user/{id}")
-    public void delete(@PathVariable("id") Long id){
+    //Eliminar user
+    @DeleteMapping("/api/user/eliminar-user/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.delete(id);
+        return ResponseEntity.noContent().build();  // Devolver un status 204 No Content
     }
 }

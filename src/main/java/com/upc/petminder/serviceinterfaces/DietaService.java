@@ -69,4 +69,25 @@ public class DietaService {
         return dto;
     }
 
+    // Modificar una dieta
+    public DietaDto update(Long id, DietaDto dietaDto) {
+        // Buscar la dieta existente
+        Dieta existingDieta = dietaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Dieta no encontrada"));
+        // Mapear los nuevos datos del DTO a la dieta existente
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.map(dietaDto, existingDieta);
+        // Guardar la dieta actualizada
+        Dieta updatedDieta = dietaRepository.save(existingDieta);
+        // Mapear la entidad actualizada al DTO y devolverla
+        return modelMapper.map(updatedDieta, DietaDto.class);
+    }
+    // Eliminar una dieta
+    public void delete(Long id) {
+        Dieta dieta = dietaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Dieta no encontrada"));
+        // Eliminar la dieta
+        dietaRepository.delete(dieta);
+    }
+
 }

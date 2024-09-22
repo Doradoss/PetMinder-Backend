@@ -38,7 +38,6 @@ public class MascotaController {
         return ResponseEntity.ok(mascotaDto);
     }
 
-
     @PostMapping("/registrar-mascota")
     public ResponseEntity<MascotaDto> create(@RequestBody MascotaDto mascotaDto) {
         return new ResponseEntity<>(mascotaService.save(mascotaDto), HttpStatus.CREATED);
@@ -47,6 +46,19 @@ public class MascotaController {
     @GetMapping("/totalmascotaespecie")
     public ResponseEntity<TotalMascotasPorEspecieDto> ListaRecordatoriosEnPeriodo (){
         return ResponseEntity.ok(mascotaService.totalMascotasPorEspecieDto());
+    }
+
+    //Modificar Mascota
+    @PutMapping("/actualizar-mascota/{id}")
+    public ResponseEntity<MascotaDto> update(@PathVariable Long id, @RequestBody MascotaDto mascotaDto) {
+        MascotaDto updatedMascotaDto = mascotaService.update(id, mascotaDto);
+        return ResponseEntity.ok(updatedMascotaDto);  // Devolver el DTO actualizado
+    }
+    //Eliminar Mascota
+    @DeleteMapping("/eliminar-mascota/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        mascotaService.delete(id);
+        return ResponseEntity.noContent().build();  // Devolver un status 204 No Content
     }
 
 }
