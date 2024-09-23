@@ -1,9 +1,9 @@
 # Etapa 1: Construcción
 FROM maven:3.8.5-jdk-21 as builder
 WORKDIR /app
-COPY PetMinder-Backend/pom.xml .  # Copia el archivo de configuración de Maven
-COPY PetMinder-Backend/src ./src  # Copia el código fuente
-RUN mvn clean package  # Construye el JAR
+COPY PetMinder-Backend/pom.xml .
+COPY PetMinder-Backend/src ./src
+RUN mvn clean package
 
 # Etapa 2: Ejecutar la aplicación
 FROM openjdk:21
