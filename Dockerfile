@@ -1,5 +1,5 @@
 # Etapa 1: Construcción
-FROM maven:3.8.5-openjdk-22 as builder
+FROM maven:3.8.5-openjdk-21 as builder
 WORKDIR /app
 COPY PetMinder-Backend/pom.xml .
 COPY PetMinder-Backend/src ./src
