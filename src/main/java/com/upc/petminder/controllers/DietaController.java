@@ -23,16 +23,50 @@ public class DietaController {
         this.dietaService = dietaService;
     }
 
+    //Listar Dietas
+    @GetMapping("/findall-dieta")
+    public ResponseEntity<List<DietaDto>> findAll() {
+        return ResponseEntity.ok(dietaService.findAll());
+    }
+
+    //Listar Dietas por id
+    @GetMapping("/dieta/{id}")
+    public ResponseEntity<DietaDto> findById(@PathVariable Long id) {
+        DietaDto dietaDto = dietaService.getDietaById(id);
+        if (dietaDto == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(dietaDto);
+    }
+
+    //Registrar Dieta
     @PostMapping("/registrar-dieta")
     @PreAuthorize("hasAuthority('VETERINARY')")
     public ResponseEntity<DietaDto> create(@RequestBody DietaDto dietaDto) {
         return new ResponseEntity<>(dietaService.save(dietaDto), HttpStatus.CREATED);
     }
 
+    //Listar dietas por fecha de asignacion
     @GetMapping("/listar-dieta-fecha")
     public ResponseEntity<List<DietaPorFechaCreacionDto>> listDietaPorFecha(
             @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
         return ResponseEntity.ok(dietaService.dietaPorFechaCreacionDtos(fecha));
+    }
+
+    // Modificar una dieta
+    @PutMapping("/actualizar-dieta/{id}")
+    @PreAuthorize("hasAuthority('VETERINARY')")
+    public ResponseEntity<DietaDto> update(@PathVariable Long id, @RequestBody DietaDto dietaDto) {
+        DietaDto updatedDietaDto = dietaService.update(id, dietaDto);
+        return ResponseEntity.ok(updatedDietaDto);  // Devolver el DTO actualizado
+    }
+
+    // Eliminar una dieta
+    @DeleteMapping("/eliminar-dieta/{id}")
+    @PreAuthorize("hasAuthority('VETERINARY')")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        dietaService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

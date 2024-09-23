@@ -22,6 +22,20 @@ public class Users implements Serializable {
 	@Column(length = 200)
 	private String password;
 	private Boolean enabled;
+
+	@Column(length = 50) // Agregado para el nombre
+	private String nombre;
+
+	@Column(length = 50) // Agregado para los apellidos
+	private String apellidos;
+
+	@Column(length = 9) // Agregado para el celular
+	private String celular;
+
+	@Column(length = 100, unique = true) // Agregado para el email
+	private String email;
+
+
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id")
 	private List<Role> roles;
@@ -35,6 +49,15 @@ public class Users implements Serializable {
 	@OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Mascota> mascotas;
 
+	public Users(String username, String password, Boolean enabled, String nombre, String apellidos, String celular, String email) {
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.celular = celular;
+		this.email = email;
+	}
 
 	public Long getId() {
 		return id;

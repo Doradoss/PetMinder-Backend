@@ -19,6 +19,11 @@ public interface RecomendacionDietaRepository extends JpaRepository<Recomendacio
             "WHERE m.id = :mascotaId AND rd.fecha = :fechaAsignacion", nativeQuery = true)
     List<Tuple> dietasPorMascotaYFecha(@Param("mascotaId") int mascotaId, @Param("fechaAsignacion") LocalDate fechaAsignacion);
 
-
+    //Buscar dietas por Id de la Mascota
+    @Query(value = "SELECT d.nombre as nombreDieta, d.indicaciones as indicaciones " +
+            "FROM recomendacion_dieta rd " +
+            "JOIN dieta d ON rd.dieta_id = d.id " +
+            "WHERE rd.mascota_id = :mascotaId", nativeQuery = true)
+    List<Tuple> buscaDietaPorMascotaId(@Param("mascotaId") int mascotaId);
 
 }

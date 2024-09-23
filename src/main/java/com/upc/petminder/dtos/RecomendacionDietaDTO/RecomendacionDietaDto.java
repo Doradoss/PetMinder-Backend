@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class RecomendacionDietaDto {
     private Long id;
     private LocalDate fecha;
+
     private Long dieta_id;
     private Long mascota_id;
-
 }

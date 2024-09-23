@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -24,6 +23,8 @@ public class Recordatorios {
     private LocalDate fecha;
     @Column(name = "hora", nullable = false)
     private LocalTime hora;
+    @Column(name = "completado" , nullable = false)
+    private Boolean completado;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="tipo_recordatorio_id")

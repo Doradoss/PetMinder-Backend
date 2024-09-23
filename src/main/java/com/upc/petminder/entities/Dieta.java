@@ -25,5 +25,9 @@ public class Dieta {
     @OneToMany(mappedBy = "dieta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<RecomendacionDieta> recomendaciones_dieta;
 
-
+    public Dieta(String nombre, String indicaciones, LocalDate fecha_creacion) {
+        this.nombre = nombre;
+        this.indicaciones = indicaciones;
+        this.fecha_creacion = fecha_creacion;
+    }
 }
